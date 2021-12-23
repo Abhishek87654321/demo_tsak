@@ -13,7 +13,7 @@
 </p>
 <h1> Comments on this post</h1>
  <%if @blog_comments.present?%>
-<table id = 'data'>
+<table id = 'data' class= "table">
   <thead>
     <tr>
       <th>Title</th>
@@ -22,7 +22,7 @@
   </thead>
 
   <tbody>
-    <% @post_comments.each do |comment| %>
+    <% @blog.comments.each do |comment| %>
       <tr>
       <input type= 'hidden' name= 'id' value= '<%= comment.commentable_id %>' id= 'comment_id'>
         <td><%= comment.title %></td>
@@ -86,6 +86,9 @@ $(function(){
       success: function(data){
        alert('comment has been succesfully added');
        $('#close').click();
+       $("#data").load(location.href + " #data");
+       
+       $('#title').val('');
       }
     });
   })

@@ -34,8 +34,8 @@ class CommentsController < ApplicationController
   def comment_new
     response = {}
     @comments = Comment.new
-    @post = Post.find_by_id(params[:id])
-    response[:comment] = @post.comments.create(title: params[:title])
+    @blog = Blog.find_by_id(params[:id])
+    response[:comment] = @blog.comments.create(title: params[:title])
     render json: response
     
   end
