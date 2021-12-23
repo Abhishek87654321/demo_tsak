@@ -30,6 +30,14 @@ class CommentsController < ApplicationController
 
   def show
   end
+
+  def comment_new_first
+    response = {}
+    @comments = Comment.new
+    @post = Post.find_by_id(params[:id])
+    response[:comment] = @post.comments.create(title: params[:title])
+    render json: response
+  end
   
   def comment_new
     response = {}
@@ -37,7 +45,6 @@ class CommentsController < ApplicationController
     @blog = Blog.find_by_id(params[:id])
     response[:comment] = @blog.comments.create(title: params[:title])
     render json: response
-    
   end
 
   def destroy

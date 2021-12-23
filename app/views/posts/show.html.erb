@@ -1,5 +1,11 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+<style>
+td {
+                width:50px;
+                padding:5px
+              
+            }
+</style>
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -13,11 +19,11 @@
 </p>
 <h1> Comments on this post</h1>
  <%if @post_comments.present?%>
-<table id = 'data'>
+<table id = 'data' class= "table">
   <thead>
     <tr>
-      <th>Title</th>
-      <th colspan="2">Action</th>
+      <th scope="col">Title</th>
+      <th colspan="1" scope="col">Action</th>
     </tr>
   </thead>
 
@@ -25,8 +31,8 @@
     <% @post_comments.each do |comment| %>
       <tr>
       <input type= 'hidden' name= 'id' value= '<%= comment.commentable_id %>' id= 'comment_id'>
-        <td><%= comment.title %></td>
-        <td><%= link_to 'Edit', edit_comment_path(comment) %></td>
+        <td scope="row"><%= comment.title %></td>
+        
         <td><%= link_to 'Destroy', comment, method: :delete, data: { confirm: 'Are you sure?' } , :remote => true, :class => 'delete_comment'%></td>
       </tr>
     <% end %>
@@ -57,7 +63,7 @@
       <div class="modal-body">
       <div class="field">
       <%= form.label :title %>
-      <%= form.text_field :title %>
+      <%= form.text_field :title , :maxlength => 15 %>
       <%= form.hidden_field :id , value: params[:id]%>
     </div>
       </div>
@@ -79,13 +85,16 @@ $(function(){
     $.ajax({
       type: "get",
       contentType: "application/json",      
-      url: "/post/" + id + "/comment_new",
+      url: "/post/" + id + "/comment_new_first",
       data: { 
         title: $('#title').val(),
       },
       success: function(data){
        alert('comment has been succesfully added');
        $('#close').click();
+       $("#data").load(location.href + " #data");
+
+       $('#title').val('');
       }
     });
   })

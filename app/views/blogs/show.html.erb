@@ -57,7 +57,7 @@
       <div class="modal-body">
       <div class="field">
       <%= form.label :title %>
-      <%= form.text_field :title %>
+      <%= form.text_field :title , :maxlength => 15 %>
       <%= form.hidden_field :id , value: params[:id]%>
     </div>
       </div>
@@ -87,7 +87,6 @@ $(function(){
        alert('comment has been succesfully added');
        $('#close').click();
        $("#data").load(location.href + " #data");
-       
        $('#title').val('');
       }
     });
