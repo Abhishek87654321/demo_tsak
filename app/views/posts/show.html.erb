@@ -1,0 +1,94 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @post.title %>
+</p>
+
+<p>
+  <strong>Profession:</strong>
+  <%= @post.description %>
+</p>
+<h1> Comments on this post</h1>
+ <%if @post_comments.present?%>
+<table id = 'data'>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th colspan="2">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @post_comments.each do |comment| %>
+      <tr>
+      <input type= 'hidden' name= 'id' value= '<%= comment.commentable_id %>' id= 'comment_id'>
+        <td><%= comment.title %></td>
+        <td><%= link_to 'Edit', edit_comment_path(comment) %></td>
+        <td><%= link_to 'Destroy', comment, method: :delete, data: { confirm: 'Are you sure?' } , :remote => true, :class => 'delete_comment'%></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <%else%>
+  <p> yet no comment</p>
+  <%end%>
+</table>
+
+<%= link_to 'Edit this post', edit_post_path(@post) %> |
+<%= link_to 'Back to all post', posts_path %>
+
+<%#= link_to 'create new comment', '' , id: 'new_comment' %>
+<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModal">
+  Add new comment
+</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <%= form_with(model: @comment, :html=>{:id=>"myForm",:multipart => true,:remote=>true}) do |form| %>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="field">
+      <%= form.label :title %>
+      <%= form.text_field :title %>
+      <%= form.hidden_field :id , value: params[:id]%>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "close">Cancel</button>
+        <button type="button" class="btn btn-primary" id ="new_comment">Submit</button>
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+$(function(){
+  
+  $(document).on('click', '#new_comment', function(e){
+    e.preventDefault();
+    var id = $('#id').val();
+    $.ajax({
+      type: "get",
+      contentType: "application/json",      
+      url: "/post/" + id + "/comment_new",
+      data: { 
+        title: $('#title').val(),
+      },
+      success: function(data){
+       alert('comment has been succesfully added');
+       $('#close').click();
+      }
+    });
+  })
+})
+
+</script>
